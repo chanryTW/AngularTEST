@@ -1,0 +1,52 @@
+// 側邊欄寬度
+$nav-width: 400px;
+
+.example-container {
+  width: 100%;
+}
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: $nav-width;
+  height: 100%;
+  float: left;
+  text-align: center;
+  color: white;
+  background-color: #484848;
+}
+.nav-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+
+  width: 100%;
+}
+.item{
+  display: block;
+  width: 100%;
+  padding: 20px;
+  font-size: 30px;
+  font-weight:bold;
+  color: white;
+  text-decoration: none;
+}
+mat-panel-title {
+  margin: 0 100px;
+}
+// 目前頁面按鈕
+.active {
+  color: #F5E5C0;
+}
+
+main{
+  margin-left: $nav-width;
+  position: absolute;
+  display: block;
+
+  width: calc(100% - #{$nav-width});
+  color:#484848;
+  background-color:#F5E5C0;
+}

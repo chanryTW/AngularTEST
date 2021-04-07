@@ -1,0 +1,14 @@
+<!-- <app-tabs></app-tabs> -->
+<nav>
+  <div class="nav-container">
+    <a class="item" *ngFor="let item of navlist" routerLink="{{ item.path }}" routerLinkActive="active">{{ item.title }} 頁面</a>
+    
+    <button class="btn btn-primary" (click)="onSubmit()">
+      登出
+    </button>
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

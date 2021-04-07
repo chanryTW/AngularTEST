@@ -1,0 +1,6 @@
+<div class="alert" *ngIf="alertService.show">
+	<div class="alert-body">
+		<h3 class="alert-title"><span>{{ alertService.msg }}</span></h3>
+    <button class="btn btn-block btn-light" (click)="ok()">確定</button>
+	</div>
+</div>
