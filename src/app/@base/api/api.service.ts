@@ -28,9 +28,9 @@ export class ApiService {
 
         // Subscribe訂閱 data
 				const echo: ApiSub = {
-					data: data.Data = {},
-					code: data.Code = 1,
-					ok: data.Success = true
+					data: data.Data,
+					code: data.Code,
+					ok: data.Success
 				};
 
 				return echo;

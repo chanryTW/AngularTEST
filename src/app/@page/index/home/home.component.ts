@@ -12,7 +12,6 @@ import { AuthService } from "../../../@base/auth/auth.service";
 })
 export class HomeComponent implements OnInit {
   
-  isLoggedIn :any;
   panelOpenState = false;
   // home子路由
   page: any;
@@ -24,19 +23,9 @@ export class HomeComponent implements OnInit {
   constructor(
     private router :Router,
     private _authService :AuthService
-  ) {
-    this.isLoggedIn = _authService.isLoggedIn();
-  }
+  ) { }
 
   ngOnInit(): void {
-    // 檢查是否登入
-    // if (this.isLoggedIn.source.value) {
-    //   console.log("登入狀態");
-    // } else {
-    //   console.log("登出狀態");
-    //   // 導向login
-    //   this.router.navigate(['/login']);
-    // }
 
     // 尋找home子路由
 		this.page = this.router.config.find( item => {

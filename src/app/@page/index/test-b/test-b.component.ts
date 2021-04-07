@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AlertService } from "../../../@com/alert/alert.service";
+import { AlertService } from "../../hint/alert/alert.service";
 
 @Component({
   selector: 'app-test-b',
@@ -14,7 +14,7 @@ export class TestBComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.alertService.run('頁面呼叫alert');
+    
   }
 
 }

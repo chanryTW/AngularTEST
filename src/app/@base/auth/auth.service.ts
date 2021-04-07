@@ -1,49 +1,53 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from "rxjs";
+import { LoginSend, UserData } from 'src/app/@page/login/login';
 import { ApiService, ApiSub } from "../api/api";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-    isLoginSubject = new BehaviorSubject<boolean>(this.hasLogin());
-    private loginUrl = "http://localhost:3000/login";
     
+    /** 使用者資料當前狀態 */
+	  private onlineSubject: BehaviorSubject<UserData>;
+
+    // 使用者資料格式
+	  private userData: UserData;
+
     constructor(
       private apiService: ApiService,
-    ) { }
-    
-    // 檢查是否有使用者資料
-    public hasLogin() : boolean {
-      return !!sessionStorage.getItem('userData');
+    ) {
+      // 使用者「加載狀態」控制函式
+		  this.onlineSubject = new BehaviorSubject<UserData>(this.userData);
     }
 
     /**
      * 登入
      */
-    login( data :any ) :Observable<ApiSub> {
+    login( data :LoginSend ) :Observable<ApiSub> {
+      const data2 = {
+        Account: data.Account,
+        PassWord: data.PassWord,
+        LoginType: 0,
+        Conn: "CONN_PCD"
+      };
       return this.apiService.post(
-        'login',
-        // data,
-        ( user :any, code :number, ok :boolean ) => {
-          // 如果登入成功
-          if ( ok ) {
-            console.log(ok);
-            return user
+        'Login/LoginIn',
+        data2,
+        ( user :UserData, code, ok) => {
+          if (ok) {
             // 儲存使用者資料
             sessionStorage.setItem('userData', JSON.stringify(user));
-            // 初始化基本資料
-            // this.base.init(this.refine(user));
             // 觀察者任務賦值
-            // this.onlineSubject.next(user);
-            this.isLoginSubject.next(true);
+					  this.onlineSubject.next(user);
           } else {
             // 取消觀察者任務
             // this.onlineSubject.next(null);
+            
           }
         }
-      );
+      );    
       
       // 加密
       // return '已送出' + userData
@@ -57,16 +61,6 @@ export class AuthService {
      */
     public logout(){
       sessionStorage.removeItem('userData');
-      this.isLoginSubject.next(false);
-    }   
-    
-    /**
-     * 判斷登入
-     * @returns 
-     */
-    public isLoggedIn() : Observable<boolean> {
-      return this.isLoginSubject.asObservable();
-    }
+    } 
 
-    
 }

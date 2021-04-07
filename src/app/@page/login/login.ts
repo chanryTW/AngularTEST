@@ -1,5 +1,5 @@
 /**
- * 登入格式
+ * 登入接口格式
  */
  export class LoginSend {
 	constructor(

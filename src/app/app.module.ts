@@ -12,11 +12,12 @@ import { TestAComponent } from './@page/index/test-a/test-a.component';
 import { TestBComponent } from './@page/index/test-b/test-b.component';
 import { SystemAComponent } from './@page/index/system/system-a/system-a.component';
 import { SystemBComponent } from './@page/index/system/system-b/system-b.component';
-import { AlertComponent } from "./@com/alert/alert.component";
+import { AlertComponent } from "./@page/hint/alert/alert.component";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
+import { MinlengthDirective } from './@page/search/minlength.directive';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { MatButtonModule } from '@angular/material/button';
     TestBComponent,
     SystemAComponent,
     SystemBComponent,
-    AlertComponent
+    AlertComponent,
+    MinlengthDirective
   ],
   imports: [
     BrowserModule,

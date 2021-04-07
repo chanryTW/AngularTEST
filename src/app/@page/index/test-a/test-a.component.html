@@ -1,26 +1,2 @@
 <p>test-a works!</p>
-<div cdkScrollable class="scrolling-parent">
-  <div #scrollingParent class="scrolling-item">item 1</div>
-  <div class="scrolling-item">item 2</div>
-  <div class="scrolling-item">item 3</div>
-</div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox">10</div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox"></div>
-<div class="itemBox">10</div>
+<div class="itemBox" *ngFor="let item of items; let i = index"> 測試資料：{{ i+1 }}</div>

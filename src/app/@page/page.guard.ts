@@ -16,10 +16,9 @@ export class PageGuard implements CanActivateChild {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     
     // 回傳權限檢查結果
-    return true
-    // 沒權限
-    // this.router.navigate(['/login']);
-    // return false;
+    // ...
+    
+    // 回傳是否登入
+    return !sessionStorage.getItem('userData') ? this.router.navigate(['/login']) : true;
   }
-  
 }

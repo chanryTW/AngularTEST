@@ -13,6 +13,9 @@ export class TestAComponent implements OnInit {
   // 避免滾動重複執行
   flag :boolean = false;
 
+  // 產生測試item
+  items = Array(10);
+
   constructor(
     private element: ElementRef,
     private scrollDispatcher: ScrollDispatcher
@@ -58,7 +61,6 @@ export class TestAComponent implements OnInit {
     map( (res :any) =>  window.scrollY ), // 只取scrollY
     filter( (current :any) => { // 滾動到 底部100px高 執行
       // main頁面高度 - 客戶端高度 - 滾動高度 <100
-      console.log('123');
       return document.getElementsByTagName('main')[0].clientHeight - document.documentElement.clientHeight - current <100
     }),
     map( (y:any) => { // 計算欲載入頁數
@@ -70,6 +72,10 @@ export class TestAComponent implements OnInit {
     // 執行http載入第page頁資料
     // push進list
     console.log('pageByScroll$: ', page);
+    // 模擬寫進資料
+    for (let i = 1; i <= 10; i++) {
+      this.items.push([]);
+    }
   });
 
   // private pageByScroll$ = Observable.fromEvent(window, "scroll")
