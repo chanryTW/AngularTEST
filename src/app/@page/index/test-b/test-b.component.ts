@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AlertService } from "../../hint/alert/alert.service";
 
@@ -10,7 +11,8 @@ import { AlertService } from "../../hint/alert/alert.service";
 export class TestBComponent implements OnInit {
 
   constructor(
-    private alertService :AlertService
+    private alertService :AlertService,
+    private router :Router
   ) { }
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { BehaviorSubject, fromEvent, merge } from 'rxjs';
 import { map, filter, debounceTime, distinct } from 'rxjs/operators';
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
+// import { ScrollDispatcher } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-test-a',
@@ -9,24 +9,45 @@ import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
   styleUrls: ['./test-a.component.scss']
 })
 export class TestAComponent implements OnInit {
+  @ViewChild ('listEnd') private listEnd :ElementRef;
 
   // 避免滾動重複執行
-  flag :boolean = false;
+  // flag :boolean = false;
 
   // 產生測試item
   items = Array(10);
 
   constructor(
-    private element: ElementRef,
-    private scrollDispatcher: ScrollDispatcher
+    // private element: ElementRef,
+    // private scrollDispatcher: ScrollDispatcher
   ) { }
 
   ngOnInit(): void {
     // 停止一秒才觸發
-    // this.scrollDispatcher.scrolled().subscribe( (scrollable :CdkScrollable) => {
-    //   console.log('發生scroll了，來源為：');
+    // this.scrollDispatcher.scrolled(1000).subscribe( (scrollable :any) => {
+    //   console.log('scroll', scrollable);
     //   console.log(scrollable.getElementRef().nativeElement);
     // });
+  }
+
+  ngAfterViewInit() {
+    /**
+     * 方法一、Intersection Observer API 滾動到最底部時呼叫
+     */
+    const observer = new IntersectionObserver(
+      (entries, observer) => {
+       entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          console.log('方法一、載入10筆')
+          // 模擬寫進資料
+          for (let i = 1; i <= 10; i++) {
+            this.items.push([]);
+          }
+        }
+       });
+      }, { threshold: 0 }
+     );
+     observer.observe(this.listEnd.nativeElement);
   }
 
   // @HostListener('window:scroll', ['$event']) onScroll($event: Event): void {   
@@ -50,14 +71,15 @@ export class TestAComponent implements OnInit {
   //   }
   // }
 
-  private cache = []; 
-  private pageByManual$ = new BehaviorSubject(1);
-  private itemHeight = 220;
+  /**
+   * 方法二、Rxjs 滾動到最底部時呼叫
+   */
+  private itemHeight = 210;
   private numberOfItems = 10; // 一頁的item數
 
   // 當頁面捲動
   private pageByScroll$ :any = fromEvent(window, "scroll").pipe(
-    debounceTime(200), // 停止.2秒才觸發
+    debounceTime(200), // .2秒沒新值才觸發（控制頻率）
     map( (res :any) =>  window.scrollY ), // 只取scrollY
     filter( (current :any) => { // 滾動到 底部100px高 執行
       // main頁面高度 - 客戶端高度 - 滾動高度 <100
@@ -65,13 +87,13 @@ export class TestAComponent implements OnInit {
     }),
     map( (y:any) => { // 計算欲載入頁數
       // 進位(main頁面高度 / (單item高度 * 一頁的item數)) +1
-      return Math.ceil( document.getElementsByTagName('main')[0].clientHeight / (this.itemHeight * this.numberOfItems) ) + 1
+      return Math.ceil( document.getElementsByTagName('main')[0].clientHeight / (this.itemHeight * this.numberOfItems) )
     }),
     distinct() // 刪除重複
   ).subscribe(page => {
     // 執行http載入第page頁資料
     // push進list
-    console.log('pageByScroll$: ', page);
+    console.log('方法二，呼叫後端第', page, '頁');
     // 模擬寫進資料
     for (let i = 1; i <= 10; i++) {
       this.items.push([]);
@@ -86,15 +108,15 @@ export class TestAComponent implements OnInit {
   // .map(y => Math.ceil((y + window.innerHeight)/ (this.itemHeight * this.numberOfItems)));
 
   // 當視窗大小改變
-  private pageByResize$ :any = fromEvent(window, "resize").pipe(
-    debounceTime(200),
-    map( (_:any) => {
-      Math.ceil(
-        (window.innerHeight + document.body.scrollTop) / 
-        (this.itemHeight * this.numberOfItems)
-      )
-    })
-  ).subscribe(x => console.log('pageByResize$: ',x));
+  // private pageByResize$ :any = fromEvent(window, "resize").pipe(
+  //   debounceTime(200),
+  //   map( (_:any) => {
+  //     Math.ceil(
+  //       (window.innerHeight + document.body.scrollTop) / 
+  //       (this.itemHeight * this.numberOfItems)
+  //     )
+  //   })
+  // ).subscribe(x => console.log('pageByResize$: ',x));
 
   // private pageByResize$ = Observable.fromEvent(window, "resize")
   //   .debounceTime(200) 
@@ -103,12 +125,12 @@ export class TestAComponent implements OnInit {
   //       (this.itemHeight * this.numberOfItems)
   //     ));
 
-  private pageToLoad$ = merge(this.pageByManual$, this.pageByScroll$, this.pageByResize$).pipe(
-    distinct(),
-    filter( (page :any) => {
-      return this.cache[page-1] === undefined;
-    })
-  )
+  // private pageToLoad$ = merge(this.pageByManual$, this.pageByScroll$, this.pageByResize$).pipe(
+  //   distinct(),
+  //   filter( (page :any) => {
+  //     return this.cache[page-1] === undefined;
+  //   })
+  // )
 
   // private pageToLoad$ = Observable
   //   .merge(this.pageByManual$, this.pageByScroll$, this.pageByResize$)
@@ -117,7 +139,7 @@ export class TestAComponent implements OnInit {
 
   ngOnDestroy(): void {
 		// 清除訂閱
-		this.pageByScroll$.unsubscribe();
-		this.pageByResize$.unsubscribe();
+		// this.pageByScroll$.unsubscribe();
+		// this.pageByResize$.unsubscribe();
 	}
 }
