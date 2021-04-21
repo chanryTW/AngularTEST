@@ -9,7 +9,11 @@ import { map, filter, debounceTime, distinct } from 'rxjs/operators';
   styleUrls: ['./test-a.component.scss']
 })
 export class TestAComponent implements OnInit {
-  @ViewChild ('listEnd') private listEnd :ElementRef;
+  // @ViewChild ('listEnd') private listEnd :ElementRef;
+  @ViewChild ('scrollLoad') scrollLoad :any;
+
+  // 觀察滾動執行
+  private scrollLoadSubscription :any;
 
   // 避免滾動重複執行
   // flag :boolean = false;
@@ -31,23 +35,32 @@ export class TestAComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    // 加入觀察者並訂閱
+    this.scrollLoadSubscription = this.scrollLoad.scrollLoad$.subscribe((page:Number) => {
+      console.log('執行載入api第'+page+'頁');
+      // 模擬寫進資料
+      for (let i = 1; i <= 10; i++) {
+        this.items.push([]);
+      }
+    });
+
     /**
      * 方法一、Intersection Observer API 滾動到最底部時呼叫
      */
-    const observer = new IntersectionObserver(
-      (entries, observer) => {
-       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          console.log('方法一、載入10筆')
-          // 模擬寫進資料
-          for (let i = 1; i <= 10; i++) {
-            this.items.push([]);
-          }
-        }
-       });
-      }, { threshold: 0 }
-     );
-     observer.observe(this.listEnd.nativeElement);
+    // const observer = new IntersectionObserver(
+    //   (entries, observer) => {
+    //    entries.forEach(entry => {
+    //     if (entry.isIntersecting) {
+    //       console.log('方法一、載入10筆')
+    //       // 模擬寫進資料
+    //       for (let i = 1; i <= 10; i++) {
+    //         this.items.push([]);
+    //       }
+    //     }
+    //    });
+    //   }, { threshold: 0 } // 臨界值0
+    //  );
+    //  observer.observe(this.listEnd.nativeElement);
   }
 
   // @HostListener('window:scroll', ['$event']) onScroll($event: Event): void {   
@@ -74,31 +87,31 @@ export class TestAComponent implements OnInit {
   /**
    * 方法二、Rxjs 滾動到最底部時呼叫
    */
-  private itemHeight = 210;
-  private numberOfItems = 10; // 一頁的item數
+  // private itemHeight = 210;
+  // private numberOfItems = 10; // 一頁的item數
 
-  // 當頁面捲動
-  private pageByScroll$ :any = fromEvent(window, "scroll").pipe(
-    debounceTime(200), // .2秒沒新值才觸發（控制頻率）
-    map( (res :any) =>  window.scrollY ), // 只取scrollY
-    filter( (current :any) => { // 滾動到 底部100px高 執行
-      // main頁面高度 - 客戶端高度 - 滾動高度 <100
-      return document.getElementsByTagName('main')[0].clientHeight - document.documentElement.clientHeight - current <100
-    }),
-    map( (y:any) => { // 計算欲載入頁數
-      // 進位(main頁面高度 / (單item高度 * 一頁的item數)) +1
-      return Math.ceil( document.getElementsByTagName('main')[0].clientHeight / (this.itemHeight * this.numberOfItems) )
-    }),
-    distinct() // 刪除重複
-  ).subscribe(page => {
-    // 執行http載入第page頁資料
-    // push進list
-    console.log('方法二，呼叫後端第', page, '頁');
-    // 模擬寫進資料
-    for (let i = 1; i <= 10; i++) {
-      this.items.push([]);
-    }
-  });
+  // // 當頁面捲動
+  // private pageByScroll$ :any = fromEvent(window, "scroll").pipe(
+  //   debounceTime(200), // .2秒沒新值才觸發（控制頻率）
+  //   map( (res :any) =>  window.scrollY ), // 只取scrollY
+  //   filter( (current :any) => { // 滾動到 底部100px高 執行
+  //     // main頁面高度 - 客戶端高度 - 滾動高度 <100
+  //     return document.getElementsByTagName('main')[0].clientHeight - document.documentElement.clientHeight - current <100
+  //   }),
+  //   map( (y:any) => { // 計算欲載入頁數
+  //     // 進位(main頁面高度 / (單item高度 * 一頁的item數)) +1
+  //     return Math.ceil( document.getElementsByTagName('main')[0].clientHeight / (this.itemHeight * this.numberOfItems) )
+  //   }),
+  //   distinct() // 刪除重複
+  // ).subscribe(page => {
+  //   // 執行http載入第page頁資料
+  //   // push進list
+  //   console.log('方法二，呼叫後端第', page, '頁');
+  //   // 模擬寫進資料
+  //   for (let i = 1; i <= 10; i++) {
+  //     this.items.push([]);
+  //   }
+  // });
 
   // private pageByScroll$ = Observable.fromEvent(window, "scroll")
   // .map(() => window.scrollY)
@@ -141,5 +154,6 @@ export class TestAComponent implements OnInit {
 		// 清除訂閱
 		// this.pageByScroll$.unsubscribe();
 		// this.pageByResize$.unsubscribe();
+    this.scrollLoadSubscription.unsubscribe();
 	}
 }

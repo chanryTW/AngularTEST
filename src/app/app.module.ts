@@ -18,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MinlengthDirective } from './@page/search/minlength.directive';
+import { ScrollLoadComponent } from './@com/scroll-load/scroll-load.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MinlengthDirective } from './@page/search/minlength.directive';
     SystemAComponent,
     SystemBComponent,
     AlertComponent,
-    MinlengthDirective
+    MinlengthDirective,
+    ScrollLoadComponent
   ],
   imports: [
     BrowserModule,
