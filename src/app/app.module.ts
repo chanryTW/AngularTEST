@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './@page/login/login.component';
@@ -12,7 +12,7 @@ import { TestAComponent } from './@page/index/test-a/test-a.component';
 import { TestBComponent } from './@page/index/test-b/test-b.component';
 import { SystemAComponent } from './@page/index/system/system-a/system-a.component';
 import { SystemBComponent } from './@page/index/system/system-b/system-b.component';
-import { AlertComponent } from "./@page/hint/alert/alert.component";
+import { AlertComponent } from './@page/hint/alert/alert.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -21,31 +21,31 @@ import { MinlengthDirective } from './@page/search/minlength.directive';
 import { ScrollLoadComponent } from './@com/scroll-load/scroll-load.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
-    TestAComponent,
-    TestBComponent,
-    SystemAComponent,
-    SystemBComponent,
-    AlertComponent,
-    MinlengthDirective,
-    ScrollLoadComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    
-    MatExpansionModule,
-    MatButtonModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		LoginComponent,
+		RegisterComponent,
+		HomeComponent,
+		TestAComponent,
+		TestBComponent,
+		SystemAComponent,
+		SystemBComponent,
+		AlertComponent,
+		MinlengthDirective,
+		ScrollLoadComponent,
+	],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		FormsModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+
+		MatExpansionModule,
+		MatButtonModule,
+	],
+	providers: [],
+	bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

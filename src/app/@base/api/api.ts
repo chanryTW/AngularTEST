@@ -1,14 +1,9 @@
-
 export { ApiService } from './api.service';
 
 /**
  * Api 回傳 格式
  */
-export type ApiData = (
-	data: any,
-	code?: number,
-	ok?: boolean
-) => any;
+export type ApiData = (data: any, code?: number, ok?: boolean) => any;
 
 /**
  * Api 訂閱 格式

@@ -5,7 +5,7 @@
 export const environment = {
 	production: false,
 	// api: 'http://localhost:3000'
-	api: 'https://pcd.mailroom.com.tw'
+	api: 'https://pcd.mailroom.com.tw',
 };
 
 /*
